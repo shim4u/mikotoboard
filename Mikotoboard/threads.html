@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mikotoboard - Панель Управления</title>
+<link rel="stylesheet" href="/styles/bootstrap.css">
+<link rel="stylesheet" href="/styles/style.css">
+<style>
+.frame {
+	border: 1px;
+	padding: 5px;
+	border-style: solid;
+	border-radius: 5px;
+	border-color: #eee;
+}
+</style>
+<link rel="stylesheet" href="/styles/bootstrap-responsive.css">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a href="/" class="brand">Mikotoboard</a>
+			<div class="pull-right">
+				<span class="brand">Управление бордой</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span3 visible-tablet">
+			<ul class="nav nav-list well" id="Navigation">
+				<li><a href="admin/users"><i class="icon-user"></i> Пользователи</a></li>
+				<li><a href="admin/bans"><i class="icon-ban-circle"></i> Баны</a></li>
+				<li><a href="admin/boards"><i class="icon-list-alt"></i> Разделы</a></li>
+				<li class="active"><a href="admin/threads"><i class="icon-folder-close"></i> Треды</a></li>
+				<li><a href="admin/posts"><i class="icon-file"></i> Посты</a></li>
+				<li><a href="admin/stats"><i class="icon-tasks"></i> Статистика</a>
+				<li><a href="admin/wipe"><i class="icon-fire"></i> Сброс Доски</a>
+			</ul>
+		</div>
+		<div class="span2 visible-desktop">                                                        	
+    		<ul class="nav nav-list well" id="Navigation">                                         	
+    			<li><a href="admin/users"><i class="icon-user"></i> Пользователи</a></li>	
+   	 			<li><a href="admin/bans"><i class="icon-ban-circle"></i> Баны</a></li> 	
+    			<li><a href="admin/boards"><i class="icon-list-alt"></i> Разделы</a></li>	
+    			<li class="active"><a href="admin/threads"><i class="icon-folder-close"></i> Треды</a></li>	
+    			<li><a href="admin/posts"><i class="icon-file"></i> Посты</a></li>  	
+    			<li><a href="admin/stats"><i class="icon-tasks"></i> Статистика</a>	
+    			<li><a href="admin/wipe"><i class="icon-fire"></i> Сброс Доски</a>	
+    		</ul>                                                                                  	
+		</div>
+		<div class="span1 visible-phone">
+			<ul class="nav nav-list well" id="Navigation">
+				<li><a href="admin/users"><i class="icon-user"></i> Пользователи</a></li>
+	 			<li><a href="admin/bans"><i class="icon-ban-circle"></i> Баны</a></li>
+				<li><a href="admin/boards"><i class="icon-list-alt"></i> Разделы</a></li>
+				<li class="active"><a href="admin/threads"><i class="icon-folder-close"></i> Треды</a></li>
+				<li><a href="admin/posts"><i class="icon-file"></i> Посты</a></li>
+				<li><a href="admin/stats"><i class="icon-tasks"></i> Статистика</a>
+				<li><a href="admin/wipe"><i class="icon-fire"></i> Сброс Доски</a>
+			</ul>
+		</div>
+		<div class="tab-content">
+			SAMPLE TEXT
+		</div>
+	</div>
+</body>
+<script src="/styles/js/jquery.js"></script>
+<script src="/styles/js/bootstrap-tab.js"></script>
+<script src="/styles/js/bootstrap-button.js"></script>
+<script src="/styles/js/bootstrap-transition.js"></script>
+<script src="/styles/js/bootstrap-collapse.js"></script>
+<script>
+	$(".collapse").collapse({toggle: false});
+</script>

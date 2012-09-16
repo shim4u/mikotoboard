@@ -1,0 +1,117 @@
+{% autoescape None %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Mikotoboard</title>
+<link rel="stylesheet" href="/styles/bootstrap.css">
+<link rel="stylesheet" href="/styles/style.css">
+<style>
+.myleft{
+	float: left;
+	}
+</style>
+<link rel="stylesheet" href="/styles/bootstrap-responsive.css">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+<<<<<<< local
+			<ul class="nav">
+			<li><a class="brand" href="#">Mikotoboard</a></li>
+			<li class="divider-vertical"></li>
+				<li><a id="tooltip" rel="tooltip" title="{{ _board['desc'] }}" href="/{{ _board['id'] }}/">/{{ _board['id'] }}/</a></li>
+			{% end %}
+			</ul>
+			<div class="pull-right"><span class="brand">/{{ board['id'] }}/ - {{ board['desc'] }}</span></div>
+		</div>
+	</div>
+</div>
+	<form action="/thread/{{ board['id'] }}/" class="input well form-horizontal" method="post" enctype="multipart/form-data">
+		<fieldset>
+			<div class="control-group">
+				<label class="control-label" for="name">Имя</label>
+				<div class="controls">
+					<input type="text" class="input-xlarge" id='name' name="name">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="picture">Изображение</label>
+				<div class="controls">
+					<input type="file" class="input-xlarge" id="picture" name="picture">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="message">Сообщение</label>
+				<div class="controls">
+					<textarea class="input-xlarge" name="message" id="message"></textarea>
+				</div>
+			</div>
+		<div class="pull-right">
+		<a class="btn" data-toggle="modal" href="#Help">Помощь</a>
+		<button class="btn" type="submit">Отправить</button>
+		</div>
+		</fieldset>
+	</form>
+<div class="container">
+	{% for thread in threads %}
+				<b> <i class="icon-time" rel="tooltip" id="tooltip" title="{{thread['op']['pub_date']}}"></i> <font color="#5B1CFC">{{ thread['op']['name'] }}</font> | <a name="{{ thread['op']['id'] }}">№{{ thread['op']['id'] }}</a> | {% if auth %}{{ thread['op']['ip'] }} |{% end %} <a href="/thread/{{ thread['op']['thread'] }}">Открыть Тред</a></b>{% if auth %} | <input type="checkbox" name="post" value="{{ thread['op']['id'] }}" form="delete_post">{% end %}{% if thread['posts'] %}<i data-toggle="collapse" data-target="#{{thread['op']['thread']}}" id="tooltip" rel="tooltip" title="Свернуть\Развернуть Тред" class="icon-th-list pull-right"></i>{% end %}<br>
+				<a href="{{ thread['op']['picture'] }}"><img style="float: left; padding: 5px; border-radius: 10px;" src="{{thread['op']['thumb']}}"></a>
+				<div style="padding: 5px">{{ thread['op']['message'] }}</div>
+				<div id="{{ thread['op']['thread'] }}" class="collapse">
+				{% for post in thread['posts'] %}
+					<div class="row-fluid">
+						<div class="span12 show-grid myleft">
+							<b> <i class="icon-time" rel="tooltip" id="tooltip" title="{{ post['pub_date'] }}"></i> <font color="#5B1CFC">{{ post['name'] }}</font> | <a name="{{ post['id'] }}">№{{ post['id'] }}</a> | {% if auth %}{{ post['ip'] }} |{% end %} <a href="/thread/{{ post['thread'] }}">Открыть Тред</a></b>{% if auth %} | <input type="checkbox" name="post" value="{{ post['id'] }}" form="delete_post">{% end %}<br>
+							{% if post['picture'] %}<a href="{{ post['picture'] }}"><img style="float: left; padding: 5px; border-radius: 10px;" src="{{post['thumb']}}"></a>{% end %}
+							<div style="padding: 5px">{{ post['message'] }}</div>
+						</div>
+					</div>
+				{% end %}
+				</div>
+			</div>
+		</div>
+		<br>
+	{% end %}
+</div>
+{% if auth %}<form action="/admin/rp" method="post" id="delete_post"><button class="btn" type="submit">Удалить Посты</button></form>{% end %}
+<center><div class="brand">Микотодоска v1.5</div></center>
+<script src="/styles/js/jquery.js"></script>
+<script src="/styles/js/bootstrap-transition.js"></script>
+<script src="/styles/js/bootstrap-modal.js"></script>
+<script src="/styles/js/bootstrap-collapse.js"></script>
+<script src="/styles/js/bootstrap-tooltip.js"></script>
+<script>
+$('*#tooltip').tooltip({placement:'bottom'})
+$('.collapse').collapse({toggle: false})
+</script>
+<div class="modal hide" id="Help">
+	<div class="modal-header">
+		<div class="pull-right"><button type="button" class="close" data-dismiss="modal">x</button></div>
+		<h3>Помощь</h3>
+	</div>
+	<div class="modal-body">
+		<h4>Правила</h4>
+		<ul>
+		<li>Троллинг запрещён</li>
+		<li>Постинг детской порнографии запрещён</li>
+		<li>Постарайтесь воздержаться от оскорблений</li>
+		<li>Постарайтесь использовать смайлики в сообщениях как можно реже</li>
+		<li>Будте няшей</li>
+		</ul>
+		<hr>
+		<h4>Разметка</h4>
+		<p>@12 - <a href="#">>>12</a> - обращение к посту</p>
+		<p>>Текст - <font color="green">>Текст</font> - Цитата</p>
+		<p>**Жирный** - <b>Жирный</b></p>
+		<p>*Курсив* - <i>Курсив</i></p>
+		<p>%%спойлер%% - <span class=spoiler>спойлер</span></p>
+		<hr>
+		<h4>Изображения</h4>
+		<p>Поддерживаемые форматы:</P>
+		<p><b>.png .jpg .gif .jpeg</b></p>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{% autoescape None %}
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="/styles/bootstrap.css">
+<link rel="stylesheet" href="/styles/style.css">
+<link rel="stylesheet" href="/styles/bootstrap-responsive.css">
+<title>{{title}}</title>
+</head>
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<ul class="nav">
+				<li><a href="/" class="brand">{{title}}</a></li>
+				<li><div class="divider-vertical"></div>
+				{% for board in boards %}
+					<li><a href="/{{board['id']}}/" id="tooltip" rel="tooltip" title="{{board['desc']}}">/{{board['id']}}/</a></li>
+				{% end %}
+				</ul>
+				{% if post %}<div class="pull-right"><span class="brand">/{{board['id']}}/ - Пост №{{post['id']}}</span></div>{% end %}
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="row-fluid">
+		{% if post %}
+			<div class="span12 well">
+				<b>
+					<font color="#5B1CFC">{{ post['name'] }}</font> | 
+					<a name="{{ post['id'] }}">№{{ post ['id'] }}</a> 
+					{% if auth %}| {{ post['ip'] }} {% end %}
+					<i class="icon-time" rel="tooltip" id="tooltip" title="{{ post['pub_date'] }}"></i>
+					{% if post['op']%}<span class="badge badge-success">OP</span>{% end %}
+				</b>
+					<div class="pull-right">
+						<a href="/thread/{{post['thread']}}" class="btn"><i class="icon-arrow-left"></i> Назад</a>
+					</div>
+				<br>
+				{% if post['picture'] %}<a href="{{ post['picture'] }}" target="blank_new"><img src="{{ post['thumb'] }}" style="float: left; border-raidus: 10px; padding: 5px;"></a>{% end %}
+				<div style="padding: 5px;">{{ post['message'] }}</div>
+			<div>
+		{% else %}
+			<div class="span12">
+				<font color="RED"><center>Запрошеного поста не существует</center></font>
+			<div>
+		{% end %}
+	</div>
+</div>
+<center><h6>Микотодоска v1.1</h6></center>
+</center>
+</body>
+</html>

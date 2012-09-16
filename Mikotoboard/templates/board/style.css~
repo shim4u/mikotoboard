@@ -1,0 +1,31 @@
+	.thread {
+	width: auto;
+	padding: 10px;
+	border: 2px solid: #bfbfbf;
+	background: #B5B5B5;
+	border-radius: 6px;
+	}
+	
+	.post < .thread {
+	width: auto;
+	padding: 5px;
+	border: 2px solid: #fff;
+	background: WHITE;
+	border-radius: 6px;
+	}
+	
+	.post {
+	width: auto;
+	padding: 5px;
+	border: 2px solid: #bfbfbf;
+	background: #B5B5B5;
+	border-radius: 6px;
+	}
+	
+	.clear{
+	float:none;
+	clear:both;
+	height:0;
+	line-height:0;
+	overflow:hidden;
+	}

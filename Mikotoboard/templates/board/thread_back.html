@@ -1,0 +1,61 @@
+{% autoescape None %}
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/styles/style.css">
+</head>
+<body bgcolor="#6E6E6E">
+<a href="/">Назад</a>
+<hr>
+<center>
+	{% if thread %}
+	<form action="/thread/{{ thread['id'] }}" method="post" enctype="multipart/form-data">
+	<table class="post">
+	<tr><td>Name</td><td><input type="text" name="name"></td></tr>
+	<tr><td>Picture</td><td><input type="file" name="picture"></td></tr>
+	<tr><td>Message</td><td><textarea type="text" name="message" ></textarea></td></tr>
+	<tr><td></td><td align="left"><input type="Submit" value="Submit"></td></tr>
+	</table>
+	<hr>
+	{% if posts %}
+		<table width=100%>
+			{% for post in posts %}
+				{% if post['op'] %}
+					<tr>
+					<td class="post">
+					<a href = "{{ post['picture'] }}"><img src="{{ post['thumb'] }}", width="200px", style="float:left; border-radius: 10px; padding: 5px;"></a>
+					<b><font color="#5B1CFC">{{ post['name'] }}</font> | {{ post['pub_date'] }} | <a name="{{ post['id'] }}">№{{ post['id'] }}</a> | <a href="/post/{{ post['id'] }}">Открыть пост</a></b> | <font color="Green">OP</font></b>
+					<div style="margin-bottom: 10px;height:0;line-height:0;overflow:hidden;border-bottom: 1px solid #666; width:auto;"></div>
+					<p>{{ post['message'] }}</p>
+					<div class="clear"></div>
+					</td>
+					</tr>
+				{% else %}
+					{% if post['picture'] %}
+						<tr>
+						<td class="post">
+						<a href = "{{ post['picture'] }}"><img src="{{ post['thumb'] }}", width="200px", style="float:left; border-radius: 10px; padding: 5px;"></a>
+						<b><font color="#5B1CFC">{{ post['name'] }}</font> | {{ post['pub_date'] }} | <a name="{{ post['id'] }}">№{{ post['id'] }}</a> | <a href="/post/{{ post['id'] }}">Открыть пост</a></b>
+						<div style="margin-bottom: 10px;height:0;line-height:0;overflow:hidden;border-bottom: 1px solid #666; width:auto;"></div>
+						<p>{{ post['message'] }}</p>
+						<div class="clear"></div>
+						</td>
+						</tr>
+					{% else %}
+						<tr>
+						<td class="post">
+						<b><font color="#5B1CFC">{{ post['name'] }}</font> | {{ post['pub_date'] }} | <a name="{{ post['id'] }}">№{{ post['id'] }}</a> | <a href="/post/{{ post['id'] }}">Открыть пост</a></b>
+						<div style="margin-bottom: 10px;height:0;line-height:0;overflow:hidden;border-bottom: 1px solid #666; width:auto;"></div>
+						<p>{{ post['message'] }}</p>
+						<div class="clear"></div>	
+						</td>
+						</tr>
+					{% end %}
+				{% end %}	
+			{% end %}
+		</table>
+	{% end %}
+	{% end %}
+<h6>Микотодоска v1.1</h6>
+</center>
+</body>
+</html>

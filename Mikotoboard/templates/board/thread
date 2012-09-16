@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Микотодоска - Тред №{{ thread['id']}}</title>
+	<link rel="stylesheet" href="/styles/bootstrap.css">
+	<link rel="stylesheet" href="/styles/style.css">
+	<link rel="stylesheet" href="/styles/boostrap-responsive.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="btn" href="/{{ thread['board'] }}/">Назад</a>
+			</div>
+		</div>
+	</div>
+	<center>
+		<form action="/thread/{{ thread['id'] }}/" method="post" enctype="multipart/form-data">
+			<table class="input">
+				<tr><td>Имя</td><td><input type="text" name="name"</td></tr>
+				<tr><td>Изображение</td><td><input type="file" name="picture"></td></tr>
+				<tr><td>Сообщение</td><td><textarea type="text" name="message"></td></tr>
+			</table>
+		</form>
+	</center>
+	<div class="container">
+			<div class="row-fluid show-grid">
+			{% for post in posts %}
+			{% if post['op'] %}
+				<div class="span12">
+					<b><font color="#5B1CFC">{{ post['name'] }}</font> | {{ post['pub_date'] }} | <a name="{{ post['id'] }}">№{{ post ['id'] }}</a> | <a href="/post/{{ post['id'] }}">Открыть пост</a> | <font color=green>OP</font></b><br>
+					<div class="line" />
+					<a href="{{ post['picture'] }}"><img src="{{ post['thumb'] }}" style="float: left, border-raidus: 6px; padding: 5px;"></a>
+					{{ post['message'] }}
+				</div>
+			{% else %}
+				{% if post['picture'] %}
+				<div class="span12">
+					<b><font color="#5B1CFC">{{ post['name'] }}</font> | {{ post['pub_date'] }} | <a name="{{ post['id'] }}">№{{ post ['id'] }}</a> | <a href="/post/{{ post['id'] }}">Открыть пост</a> | <font color=green>OP</font></b><br>
+        	                        <div class="line" />
+                	                <a href="{{ post['picture'] }}"><img src="{{ post['thumb'] }}" style="float: left, border-raidus: 6px; padding: 5px;"></a>
+                        	        {{ post['message'] }}
+				</div>
+				{% else %}
+				<div class="span12">
+					<b><font color="#5B1CFC">{{ post['name'] }}</font> | {{ post['pub_date'] }} | <a name="{{ post['id'] }}">№{{ post ['id'] }}</a> | <a href="/post/{{ post['id'] }}">Открыть пост</a> | <font color=green>OP</font></b><br>
+                                        <div class="line" />
+					{{ post['message'] }}
+				</div>
+				{% end %}
+			{% end %}
+			{% end %}
+			</div>
+	</div>
+</body>
+</html>
+
+

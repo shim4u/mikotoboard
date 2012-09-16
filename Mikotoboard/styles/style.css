@@ -1,0 +1,50 @@
+body {
+	padding-top: 15px !important;
+	background-color: #D8D8D8 !important;
+}
+
+.hrthread {
+	border-bottom: 1px solid #707070;
+	width: 99%;
+}
+.post {
+	border-style: solid;
+	border-color: #686868;
+	border-radius: 6px;
+	border-width: 1px;
+	box-shadow: 0  4px 2px -2px rgba(0, 0, 0, 0.5);
+	background-color: white;
+}
+.clear {
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+.hr {
+	border-bottom: 1px solid #E8E8E8;
+	width: 99%;
+}
+.divider {
+	border-bottom: 1px dashed #282828;
+	padding-top: 10px;
+	margin-bottom: 10px;
+}
+.submitButton {
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background-color:#ededed;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	color:#777777;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #ffffff;
+}.submitButton:hover {
+	background-color:#dfdfdf;
+}.submitButton:active {
+	position:relative;
+	top:1px;
+}

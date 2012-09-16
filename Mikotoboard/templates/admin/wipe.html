@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mikotoboard - Панель Управления</title>
+<link rel="stylesheet" href="/styles/bootstrap.css">
+<link rel="stylesheet" href="/styles/style.css">
+<style>
+.frame {
+	border: 1px;
+	padding: 5px;
+	margin-bottom: 10px;
+	border-style: solid;
+	border-radius: 5px;
+	border-color: #eee;
+}
+</style>
+<link rel="stylesheet" href="/styles/bootstrap-responsive.css">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a href="/" class="brand">Mikotoboard</a>
+			<div class="pull-right">
+				<span class="brand">Управление бордой</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span3 visible-tablet">
+			<ul class="nav nav-list well" id="Navigation">
+				<li><a href="users"><i class="icon-user"></i> Пользователи</a></li>
+				<li><a href="bans"><i class="icon-ban-circle"></i> Баны</a></li>
+				<li><a href="boards"><i class="icon-list-alt"></i> Разделы</a></li>
+				<li><a href="threads"><i class="icon-folder-close"></i> Треды</a></li>
+				<li><a href="posts"><i class="icon-file"></i> Посты</a></li>
+				<li><a href="stats"><i class="icon-tasks"></i> Статистика</a>
+				<li class="active"><a href="wipe"><i class="icon-fire"></i> Сброс Доски</a>
+			</ul>
+		</div>
+		<div class="span2 visible-desktop">                                                        	
+    		<ul class="nav nav-list well" id="Navigation">                                         	
+    			<li><a href="users"><i class="icon-user"></i> Пользователи</a></li>	
+   	 			<li><a href="bans"><i class="icon-ban-circle"></i> Баны</a></li> 	
+    			<li><a href="boards"><i class="icon-list-alt"></i> Разделы</a></li>	
+    			<li><a href="threads"><i class="icon-folder-close"></i> Треды</a></li>	
+    			<li><a href="posts"><i class="icon-file"></i> Посты</a></li>  	
+    			<li><a href="stats"><i class="icon-tasks"></i> Статистика</a>	
+    			<li class="active"><a href="wipe"><i class="icon-fire"></i> Сброс Доски</a>	
+    		</ul>                                                                                  	
+		</div>
+		<div class="span1 visible-phone">
+			<ul class="nav nav-list well" id="Navigation">
+				<li><a href="users"><i class="icon-user"></i> Пользователи</a></li>
+	 			<li><a href="bans"><i class="icon-ban-circle"></i> Баны</a></li>
+				<li><a href="boards"><i class="icon-list-alt"></i> Разделы</a></li>
+				<li><a href="threads"><i class="icon-folder-close"></i> Треды</a></li>
+				<li><a href="posts"><i class="icon-file"></i> Посты</a></li>
+				<li><a href="stats"><i class="icon-tasks"></i> Статистика</a>
+				<li class="active"><a href="wipe"><i class="icon-fire"></i> Сброс Доски</a>
+			</ul>
+		</div>
+		<div class="span9">
+			<form action="/admin/" method="post" id="wipe">
+				<input type="hidden" name="type" value="wipe">
+				Пароль: <input type="text" class="input-xlarge" name="password"><br>
+				<div class="alert fade in hide" id="wipe_alert">
+					<button class="close" onClick="$('#wipe_alert').hide()">x</button>
+					<strong>Ошибка!</strong> Не введён пароль
+				</div>
+				<button type="button" class="btn btn-failure" data-toggle="modal" data-target="#wipe_modal">Сброс Доски</button>
+			</form>
+		</div>
+	</div>
+	<div class="modal hide" id="wipe_modal">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h3>Внимание!</h3>
+		</div>
+		<div class="modal-body">
+			<p>Совершая сброс доски, вы сохраняете критичные для работы скрипта настройки, но при этом удаляете ВСЮ остальную информацию(Разделы, посты, треды, пользователи(кроме совершаюшего вайп)). Удалённая информация востановлению не подлежит и будет утеряна навсегда(Это оооочень долго!) Продолжить?</p>
+			<div class="form-actions">
+				<button type="button" onClick="check()" class="btn btn-failure">Удалить</button>
+				<button type="button" data-dismiss="modal" class="btn">Отмена</button>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="/styles/js/jquery.js"></script>
+<script src="/styles/js/bootstrap-alert.js"></script>
+<script src="/styles/js/bootstrap-tab.js"></script>
+<script src="/styles/js/bootstrap-button.js"></script>
+<script src="/styles/js/bootstrap-transition.js"></script>
+<script src="/styles/js/bootstrap-tooltip.js"></script>
+<script src="/styles/js/bootstrap-collapse.js"></script>
+<script src="/styles/js/bootstrap-modal.js"></script>
+<script>
+	function check(){
+		pass = document.forms['wipe']['password']['value'];
+		if(pass == ""){
+			$("#wipe_modal").modal('hide');
+			$("#wipe_alert").show();
+		}
+		else{
+			document.forms['wipe'].submit();
+		}
+	}
+	$("*#tooltip").tooltip();
+	$("#wipe_modal").modal({show: false});
+	$(".collapse").collapse({toggle: false});
+</script>

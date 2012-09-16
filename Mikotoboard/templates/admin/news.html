@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mikotoboard - Панель Управления</title>
+<link rel="stylesheet" href="/styles/bootstrap.css">
+<link rel="stylesheet" href="/styles/style.css">
+<style>
+.frame {
+	border: 1px;
+	padding: 5px;
+	margin-bottom: 10px;
+	border-style: solid;
+	border-radius: 5px;
+	border-color: #eee;
+}
+</style>
+<link rel="stylesheet" href="/styles/bootstrap-responsive.css">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a href="/" class="brand">Mikotoboard</a>
+			<div class="pull-right">
+				<span class="brand">Управление бордой</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span3 visible-tablet">
+			<ul class="nav nav-list well" id="Navigation">
+				<li><a href="users"><i class="icon-user"></i> Пользователи</a></li>
+				<li><a href="bans"><i class="icon-ban-circle"></i> Баны</a></li>
+				<li class="active"><a href="news"><i class="icon-bullhorn"></i> Новости</a></li>
+				<li><a href="boards"><i class="icon-list-alt"></i> Разделы</a></li>
+				<li><a href="threads"><i class="icon-folder-close"></i> Треды</a></li>
+				<li><a href="posts"><i class="icon-file"></i> Посты</a></li>
+				<li><a href="stats"><i class="icon-tasks"></i> Статистика</a>
+				<li><a href="wipe"><i class="icon-fire"></i> Сброс Доски</a>
+			</ul>
+		</div>
+		<div class="span2 visible-desktop">                                                        	
+    		<ul class="nav nav-list well" id="Navigation">                                         	
+    			<li><a href="users"><i class="icon-user"></i> Пользователи</a></li>	
+   	 			<li><a href="bans"><i class="icon-ban-circle"></i> Баны</a></li> 	
+				<li class="active"><a href="news"><i class="icon-bullhorn"></i> Новости</a></li>
+    			<li><a href="boards"><i class="icon-list-alt"></i> Разделы</a></li>	
+    			<li><a href="threads"><i class="icon-folder-close"></i> Треды</a></li>	
+    			<li><a href="posts"><i class="icon-file"></i> Посты</a></li>  	
+    			<li><a href="stats"><i class="icon-tasks"></i> Статистика</a>	
+    			<li><a href="wipe"><i class="icon-fire"></i> Сброс Доски</a>	
+    		</ul>                                                                                  	
+		</div>
+		<div class="span1 visible-phone">
+			<ul class="nav nav-list well" id="Navigation">
+				<li><a href="users"><i class="icon-user"></i> Пользователи</a></li>
+	 			<li><a href="bans"><i class="icon-ban-circle"></i> Баны</a></li>
+				<li class="active"><a href="news"><i class="icon-bullhorn"></i> Новости</a></li>
+				<li><a href="boards"><i class="icon-list-alt"></i> Разделы</a></li>
+				<li><a href="threads"><i class="icon-folder-close"></i> Треды</a></li>
+				<li><a href="posts"><i class="icon-file"></i> Посты</a></li>
+				<li><a href="stats"><i class="icon-tasks"></i> Статистика</a>
+				<li><a href="wipe"><i class="icon-fire"></i> Сброс Доски</a>
+			</ul>
+		</div>
+		<div class="span9">
+			<h3>Добавить Новость</h3>
+			<form action="/admin/" method="post" id="new_article">
+				<input type="hidden" name="type" value="add_news">
+				<input type="text" name="head" placeholder="Заголовок" class="input-xlarge">
+				<textarea name="body" placeholder="Текст новости" class="input-xlarge"></textarea><br>
+				<div class="pull-right">
+					<button type="submit" class="btn">Добавить</button>
+				</div>
+			</form>
+			<br>
+			<hr>
+			{% for art in news %}
+				<div class="frame">
+					<i class="icon-time" rel="tooltip" id="tooltip" title="{{art['pub_date']}}"></i> 
+					<b><a href="#" data-toggle="collapse" data-target="#{{art['id']}}">{{art['head']}}</a></b>|
+					<b>Размещено:</b> {{art['user']}}
+					<div class="pull-right">
+						<input type="checkbox" form="remove_news" name='article' value="{{art['id']}}">
+						<i class="icon-trash"></i>
+					</div>
+					<div class="collapse" id="{{art['id']}}">
+						<form action="/admin/" id="form_{{art['id']}}" method="post">
+							<input type="hidden" name="type" value="mod_news">
+							<input type="hidden" name="id" value="{{art['id']}}">
+							<input type="text" class="input-xlarge" name="head" value="{{art['head']}}">
+							<textarea class="input-xlarge" name="body">{{art['body']}}</textarea>
+							<div class="pull-right">
+								<button type="submit" class="btn">Изменить Новость</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			{% end %}
+			<div class="pull-right">
+				<form action="/admin/" method="post" id="remove_news">
+					<input type="hidden" name="type" value="remove_news">
+					<button class="btn btn-warning" type="submit">Удалить</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="/styles/js/jquery.js"></script>
+<script src="/styles/js/bootstrap-alert.js"></script>
+<script src="/styles/js/bootstrap-tab.js"></script>
+<script src="/styles/js/bootstrap-button.js"></script>
+<script src="/styles/js/bootstrap-transition.js"></script>
+<script src="/styles/js/bootstrap-collapse.js"></script>
+<script src="/styles/js/bootstrap-tooltip.js"></script>
+<script>
+	function check(){
+		checked = false
+		for(x=0; x<document.getElementsByName('thread').length; x++){
+			if(document.getElementsByName('thread')[x].checked==true){
+				checked = true
+			}
+		}
+		if(checked==false){
+			$('.alert').show()
+		}
+		if(checked==true){
+			document.forms['remove_threads'].submit();
+		}
+	}
+	function close_alert(){
+		$('.alert').hide()
+	}
+	$("*#tooltip").tooltip()
+	$(".collapse").collapse({toggle: false});
+</script>

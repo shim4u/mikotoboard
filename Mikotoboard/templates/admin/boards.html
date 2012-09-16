@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mikotoboard - Панель Управления</title>
+<link rel="stylesheet" href="/styles/bootstrap.css">
+<link rel="stylesheet" href="/styles/style.css">
+<style>
+.frame {
+	border: 1px;
+	padding: 5px;
+	margin-bottom: 10px;
+	border-style: solid;
+	border-radius: 5px;
+	border-color: #eee;
+}
+</style>
+<link rel="stylesheet" href="/styles/bootstrap-responsive.css">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a href="/" class="brand">Mikotoboard</a>
+			<div class="pull-right">
+				<span class="brand">Управление бордой</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span3 visible-tablet">
+			<ul class="nav nav-list well" id="Navigation">
+				<li><a href="users"><i class="icon-user"></i> Пользователи</a></li>
+				<li><a href="bans"><i class="icon-ban-circle"></i> Баны</a></li>
+				<li><a href="news"><i class="icon-bullhorn"></i> Новости</a></li>
+				<li class="active"><a href="boards"><i class="icon-list-alt"></i> Разделы</a></li>
+				<li><a href="threads"><i class="icon-folder-close"></i> Треды</a></li>
+				<li><a href="posts"><i class="icon-file"></i> Посты</a></li>
+				<li><a href="stats"><i class="icon-tasks"></i> Статистика</a>
+				<li><a href="wipe"><i class="icon-fire"></i> Сброс Доски</a>
+			</ul>
+		</div>
+		<div class="span2 visible-desktop">                                                        	
+    		<ul class="nav nav-list well" id="Navigation">                                         	
+    			<li><a href="users"><i class="icon-user"></i> Пользователи</a></li>	
+   	 			<li><a href="bans"><i class="icon-ban-circle"></i> Баны</a></li> 	
+				<li><a href="news"><i class="icon-bullhorn"></i> Новости</a></li>
+    			<li class="active"><a href="boards"><i class="icon-list-alt"></i> Разделы</a></li>	
+    			<li><a href="threads"><i class="icon-folder-close"></i> Треды</a></li>	
+    			<li><a href="posts"><i class="icon-file"></i> Посты</a></li>  	
+    			<li><a href="stats"><i class="icon-tasks"></i> Статистика</a>	
+    			<li><a href="wipe"><i class="icon-fire"></i> Сброс Доски</a>	
+    		</ul>                                                                                  	
+		</div>
+		<div class="span1 visible-phone">
+			<ul class="nav nav-list well" id="Navigation">
+				<li><a href="users"><i class="icon-user"></i> Пользователи</a></li>
+	 			<li><a href="bans"><i class="icon-ban-circle"></i> Баны</a></li>
+				<li><a href="news"><i class="icon-bullhorn"></i> Новости</a></li>
+				<li class="active"><a href="boards"><i class="icon-list-alt"></i> Разделы</a></li>
+				<li><a href="threads"><i class="icon-folder-close"></i> Треды</a></li>
+				<li><a href="posts"><i class="icon-file"></i> Посты</a></li>
+				<li><a href="stats"><i class="icon-tasks"></i> Статистика</a>
+				<li><a href="wipe"><i class="icon-fire"></i> Сброс Доски</a>
+			</ul>
+		</div>
+		<div class="span9">
+			<h2>Новый Раздел</h2>
+			<form action="/admin/" method="post" id="new_board">
+				<input type="hidden" name="type" value="new_board">
+				<input type="text" class="input-xlarge" name="id" placeholder="ID">
+				<input type="text" class="input-xlarge" name="desc" placeholder="Краткое описание">
+				<div class="alert fade in hide" id="alert_new_board">
+					<button type="button" class="close" onClick="close_alert('alert_new_board')">x</button>
+					<strong>Ошибка!</strong> Пожалуйста, укажите ID раздела и его описание.
+				</div>
+				<div class="pull-right">
+					<button type="button" class="btn btn-success" onClick="check_form('new_board')">Добавить Раздел</button>
+				</div>
+			</form>
+			{% for board in boards %}
+				<div class="frame">
+					<a href="#" data-toggle="collapse" data-target="#{{board['id']}}">/{{board['id']}}/</a> | 
+					{{board['desc']}}
+					<div class="pull-right">
+						<input type="checkbox" form="remove_boards" value="{{board['id']}}" name="board">
+						<i class="icon-trash"></i>
+					</div>
+					<div class="collapse" id="{{board['id']}}">
+						<form action="/admin/" method="post">
+							<input type="hidden" name="id" value="{{board['id']}}">
+							<input type="hidden" name="type" value="mod_board">
+							<textarea class="input-xlarge" name="desc">{{board['desc']}}</textarea>
+							<div class="pull-right">
+								<button type="submit" class="btn">Изменить описание</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			{% end %}
+			<div class="alert fade in hide" id="alert_delete">
+				<button type="button" class="close" onClick="close_alert('alert_delete')">x</button>
+				<strong>Ошибка!</strong> Выберите хотя-бы один раздел для удаления
+			</div>
+			{% if boards.count() != 0 %}
+				<div class="pull-right">
+					<form id="remove_boards" action="/admin/" method="post">
+						<input type="hidden" name="type" value="remove_boards">
+						<input type="button" class="btn btn-warning" value="Удалить Разделы" onClick="check()">
+					</form>
+				</div>
+			{% end %}
+		</div>
+	</div>
+</body>
+<script src="/styles/js/jquery.js"></script>
+<script src="/styles/js/bootstrap-alert.js"></script>
+<script src="/styles/js/bootstrap-tab.js"></script>
+<script src="/styles/js/bootstrap-button.js"></script>
+<script src="/styles/js/bootstrap-transition.js"></script>
+<script src="/styles/js/bootstrap-tooltip.js"></script>
+<script src="/styles/js/bootstrap-collapse.js"></script>
+<script>
+	function check(){
+		checked = false;
+		for(x=0; x<document.getElementsByName('board').length; x++){
+			if(document.getElementsByName('board')[x].checked==true){
+				checked = true
+			}
+		}
+		if(checked==false){
+			$('#alert_delete').show();
+		}
+		if(checked==true){
+			document.forms['remove_boards'].submit();
+		}
+	}
+	function close_alert(alert_id){
+		$('#'+alert_id).hide()
+	}
+	function check_form(form_id) {
+		board = document.forms[form_id]['id']['value'];
+		desc = document.forms[form_id]['desc']['value'];
+		if(board == "", desc == ""){
+			$('#alert_' + form_id).show();
+		}
+		else if(board == ""){
+			$('#alert_' + form_id).show();
+		}
+		else if(desc == ""){
+			$('#alert_' + form_id).show();
+		}
+		else{
+			document.forms[form_id].submit();
+		}
+	}
+	$("#tooltip").tooltip()
+	$(".collapse").collapse({toggle: false});
+</script>

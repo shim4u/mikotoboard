@@ -1,0 +1,41 @@
+{% autoescape None %}
+<!DOCTYPE HTML>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="/styles/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/styles/style.css">
+<link rel="stylesheet" type="text/css" href="/styles/bootstrap-responsive.css">
+<meta http-equiv="Content-Type" content="text/html"; charset=UTF-8>
+<title>Микотодоска</title>
+</head>
+<body>
+<div class="navbar-fixed-top">
+	<div class="container">
+		{% for _board in boards %}<a rel="tooltip" title="{{_board['desc']}}" href="/{{_board['id']}}/">/{{_board['id']}}/</a> {% end %}
+	</div>
+</div>
+<div class="container">
+	{% if news %}
+		{% for art in news%}
+			<div class="row">
+				<div class="post span12">
+					<b style="margin-left: 5px">{{art['user']}}</b> | {{art['pub_date']}}<div class="hr"></div>
+					<p style="margin: 5px">{{art['body']}}</p>
+				</div>
+			</div>
+			<div class="clear"></div>
+		{% end %}
+	{% end %}
+</div>
+</body>
+<script src="/styles/js/jquery.js"></script>
+<script src="/styles/js/bootstrap-tooltip.js"></script>
+<script src="/styles/js/bootstrap-transition.js"></script>
+<script src="/styles/js/bootstrap-carousel.js"></script>
+<script>
+$('*#tooltip').tooltip({placement: "bottom"})
+$('.carousel').carousel('next')
+$('.carousel').carousel({interval: 5000})
+</script>
+</html>

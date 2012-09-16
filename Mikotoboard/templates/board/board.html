@@ -1,0 +1,108 @@
+{% autoescape None %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Mikotoboard</title>
+<link rel="stylesheet" href="/styles/style.css">
+<link rel="stylesheet" href="/styles/bootstrap.css">
+<link rel="stylesheet" href="/styles/bootstrap-responsive.css">
+</head>
+<body>
+	<div class="navbari navbar-fixed-top">
+		<div class="container">
+			{% for _board in boards %}<a rel="tooltip" title="{{_board['desc']}}" href="/{{_board['id']}}/">/{{_board['id']}}/</a> {% end %}
+		</div>
+	</div>
+		
+	<div style="text-align: center"><h2>/{{board['id']}}/ - {{board['desc']}}</h2></div>
+	<div class="container">
+		<div class="row">
+             <div class="span6 offset3">
+                 <table style="text-align: right">
+                 <form id="newPost" enctype="multipart/form-data" method="post" action="/{{board['id']}}/">
+                     <tr>    
+                         <td><b>Имя</b></td><td width=100%><input type="text" name="name" style="width: 100%"></td>
+                     </tr>
+                     <tr>
+                         <td><b>Изображение</b></td><td style="text-align: left"><input type="file" id="file" name="picture"  style="width: 100%"></td>
+                     </td>
+                     <tr>
+                         <td><b>Сообщение</b></td><td><textarea id="message" name="message" style="width: 100%" rows="6">lol</textarea></td>
+                     </tr>
+                 </form> 
+                 </table>
+                 <div style="float: left"><a href="/" class="submitButton">На главную</a></div><div style="float: right"><a href="#" class="submitButton" onClick="submitPost()">Создать Тред</a></div>
+             </div>
+         </div>
+         <div class="clear"></div>
+	{%for thread in threads%}
+		<div class="row">
+			<div class="thread span12">
+				<div style="margin-left: 5px"><b>№{{thread['op']['id']}}</b> | {{thread['op']['name']}} | {{thread['op']['pub_date']}} <a style="float: right; margin-right: 5px" href="/thread/{{thread['op']['thread']}}">Открыть Тред</a><div class="hrthread"></div></div>
+				<a href="{{thread['op']['picture']}}"><img src="{{thread['op']['thumb']}}" style="float: left; padding: 5px; padding-bottom: 4px; border-radius: 7px"></a>
+				<p style="padding-left: 2px, padding-right: 2px">{{thread['op']['message']}}</p>
+				<div class="clear"></div>
+				{% for post in thread['posts'] %}
+				<div class="row">
+					<div class="post span11">
+						<div style="margin-left: 5px"><b>№{{post['id']}}</b> | {{post['name']}} | {{post['pub_date']}}<div class="hr"></div></div>
+						{% if post['picture'] %}<a href="{{post['picture']}}"><img src="{{post['thumb']}}" style="float: left; padding: 5px; padding-botom: 4px; border-radius: 7px"></a>{% end %}
+						<p style="padding-left: 2px; padding-right: 2px">{{post['message']}}</p>
+					</div>
+				</div>
+				<div class="clear"></div>
+				{% end %}
+			</div>
+		</div>
+		<div class="divider"></div>
+	{%end%}
+	</div>
+	<div class="pagination pagination-centered">
+		<ul>
+			{% if pages == 0 %}
+				<li class="disabled"><a>0</a></li>
+			{% else %}
+				{% if page == 0 %}
+					<li class="disabled"><a>&lt;&lt;</a></li>
+				{% else %}
+					<li><a href="/{{board['id']}}/{{ page-1 }}">&lt;&lt;</a><li>
+				{% end %}
+				{% for _page in range(pages) %}
+					<li {%if _page == page%}class="active"{%end%}><a {%if page != _page%}href="{%if _page==0%}/{{board['id']}}/{%else%}/{{board['id']}}/{{_page}}{%end%}"{%end%}>{{_page}}</a></li>
+				{% end %}
+				{% if page == pages - 1 %}
+					<li class="disabled"><a>&gt;&gt;</a></li>
+				{% else %}
+					<li><a href="/{{board['id']}}/{{ page + 1 }}">&gt;&gt;</a><li>
+				{% end %}
+			{% end %}
+		</ul>
+	</div>
+</div>
+{% if auth %}<form action="/admin/rp" method="post" id="delete_post"><button class="btn" type="submit">Удалить Посты</button></form>{% end %}
+<center><div class="brand">Микотодоска v1.6</div></center>
+<script src="/styles/js/jquery.js"></script>
+<script src="/styles/js/bootstrap-transition.js"></script>
+<script src="/styles/js/bootstrap-modal.js"></script>
+<script src="/styles/js/bootstrap-collapse.js"></script>
+<script src="/styles/js/bootstrap-tooltip.js"></script>
+<script src="/styles/js/bootstrap-button.js"></script>
+<script>
+$('*#tooltip').tooltip({placement:'bottom'})
+$('*#tooltip-time').tooltip()
+$('.collapse').collapse({toggle: false})
+function resetForm () {
+	document.getElementById('picture').value="";
+	document.getElementById('picture-url').value="";
+}
+function collapseUrl (){
+	$('#url_file').collapse('hide')
+}
+function submitPost (){
+	document.forms.newPost.submit()
+}
+</script>
+{{ help }}
+</body>
+</html>

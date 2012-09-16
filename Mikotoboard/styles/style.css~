@@ -1,0 +1,72 @@
+	.thread {
+		background-color: rgb(242, 242, 242);
+        padding: 5px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        border-top-width: 1px;
+        border-bottom-width: 1px;
+        border-left-width: 1px;
+        border-right-width: 1px;
+        border-style: solid;
+        border-radius: 6px;
+        border-color: rgb(105, 105, 105);
+	}
+	
+	.post {
+        word-wrap: break-word;
+	    padding: 5px;
+    	border: 2px solid: #bfbfbf;
+	    font-family: sans-serif;
+    	background: #B5B5B5;
+	    border-radius: 6px;
+        table-layout: fixed;
+	}
+	
+	span.spoiler{
+        background: BLACK; color: BLACK;
+	}
+	
+	span.spoiler:hover { 
+    	color: WHITE
+	}
+    .show-grid [class*="span"]{
+        background-color: rgb(247, 247, 247);
+        padding: 5px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        border-top-width: 1px;
+        border-bottom-width: 1px;
+        border-left-width: 1px;
+        border-right-width: 1px;
+        border-style: solid;
+        border-radius: 6px;
+        border-color: rgb(105, 105, 105);
+    }
+	.clear{
+    	float:none;
+    	clear:both;
+    	height:0;
+    	line-height:0;
+    	overflow:hidden;
+	}
+    body { 
+        padding-top: 60px;
+        padding-bottom: 42px;
+        background-image: url('https://twimg0-a.akamaihd.net/profile_background_images/209511241/twitter_bg.jpg');
+        background-repeat: repeat;
+        word-wrap: break-word;
+    } 
+	.input{
+		background-color: rgb(247, 247, 247);
+        padding: 5px;
+		min-width: 350px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        border-top-width: 1px;
+        border-bottom-width: 1px;
+        border-left-width: 1px;
+        border-right-width: 1px;
+        border-style: solid;
+        border-radius: 6px;
+        border-color: rgb(105, 105, 105);
+    }

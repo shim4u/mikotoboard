@@ -1,0 +1,9 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" href="styles/bootstrap.css">
+</head>
+<body>
+<div name="Div1" rel="tooltip" title="Tooltip">Test</div>
+</body>
+</html>

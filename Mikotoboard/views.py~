@@ -1,0 +1,123 @@
+#!/usr/bin/python2
+# -*- coding: utf-8 -*-
+'''
+Created on May 3, 2012
+
+@author: mikoto
+'''
+
+
+import tornado.web
+import os
+import tornado.ioloop
+import db
+import re
+class PostHandler(tornado.web.RequestHandler):
+    def initialize(self):
+        self.db = db.Database()
+    def get(self, post_id):
+        self.db.get_post(int(post_id), board=None, callback = self.on_response)
+    
+    def on_response(self, post, board):
+        self.render('templates/board/post.html', post=post, board=board)
+    
+class BoardHandler(tornado.web.RequestHandler):
+    def initialize(self):
+        self.db = db.Database()
+    
+    @tornado.web.asynchronous
+    def get(self, board):
+        self.db.get_threads(board, self.on_response)
+    
+    @tornado.web.asynchronous
+    def post(self, _board):
+        name = self.get_argument('name')
+        name = tornado.escape.xhtml_escape(name)
+        message = self.get_argument('message')
+        #message = tornado.escape.xhtml_escape(message)
+        try:
+            picture = self.request.files['picture'][0]
+        except:
+            self.write("<center>Для создания треда необходимо приложить изображение.</center>")
+            self.finish()
+            return
+	ip = self.request.remote_ip
+        ext = os.path.splitext(picture['filename'])[1]
+        r = re.compile(r'(.jpg|.png|.jpeg|.gif)')
+        if r.match(ext):
+            print _board
+            self.db.new_thread(ip=ip, name=name, picture=picture, message=message, callback=self.on_new_thread, board=_board)
+        else:
+            self.write('<center><font color=RED><b>Что-то не так. Скорее всего ошибка, или в качестве изображения указан неподходящий файл. Поробуйте ещё раз.</b></font></center>')
+            self.finish()
+        
+    def on_response(self, response, board, boards):
+        if board:
+            self.render('templates/board/board.html', auth = True, threads = response, board = board, boards = boards)
+        else:
+            self.write('<center><font color=RED>Запрошеной доски не существует</font></center>')
+            self.finish()
+    
+    def on_new_thread(self, thread_id, board_id):
+        if thread_id:
+            self.redirect('/thread/' + str(thread_id))
+        else:
+            self.write('<center><font color=RED><b>Что-то не так. Скорее всего ошибка, или в качестве изображения указан неподходящий файл. Поробуйте ещё раз.</b></font></center>')
+
+class MainHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def get(self):
+        self.redirect('/b/')
+
+class ThreadHandler(tornado.web.RequestHandler):
+    def initialize(self):
+        self.db = db.Database()
+    
+    @tornado.web.asynchronous
+    def get(self, thread_id):
+        self.db.get_posts(int(thread_id), board = None, callback=self._on_response)
+    
+    @tornado.web.asynchronous
+    def post(self, thread_id):
+        self.tid = thread_id
+        name = self.get_argument('name')
+        name = tornado.escape.xhtml_escape(name)
+        message = self.get_argument('message')
+        #message = tornado.escape.xhtml_escape(message)
+        try:
+            picture = self.request.files['picture'][0]
+        except:
+            picture = None
+        ip = self.request.remote_ip
+        self.db.new_post(name = name, message = message, thread_id = thread_id, picture = picture, callback = self.on_new_post, board=None, ip=ip)
+    
+    def on_new_post(self, thread_id, post_id, board):
+        self.redirect('/thread/'+ str(thread_id) + "#" + str(post_id))
+        #self.write(response['filename'])
+        #self.finish()
+    
+    def _on_response(self, response, thread, board):
+        self.render('templates/board/thread.html', posts = response, thread = thread, board = board, auth=auth)
+
+class AuthHandler(tornado.web.RequestHandler):
+	def initialize(self):
+		self.db = db.Database()
+	def post(self, request):
+		login = self.get_argument('login')
+		pwd = self.get_argument('password')
+		self.db.check_auth(login, password, callback=self.on_auth)
+	def on_auth(self, auth):
+		self.redirect('/')
+
+application = tornado.web.Application([
+                                       (r'/', MainHandler),
+                                       (r'/(.*)/', BoardHandler),
+                                       (r'/img/(.*)', tornado.web.StaticFileHandler, {'path': os.path.join(os.path.dirname(__file__), "img")}),
+                                       (r'/img/thumb/(.*)', tornado.web.StaticFileHandler, {'path': os.path.join(os.path.dirname(__file__), "img/thumb")}),
+                                       (r'/styles/(.*)', tornado.web.StaticFileHandler, {'path': os.path.join(os.path.dirname(__file__), "styles")}),
+                                       (r'/thread/(.*)', ThreadHandler),
+                                       (r'/post/(.*)', PostHandler)], debug=True)
+
+if __name__ == '__main__':
+    application.listen(80)
+    tornado.ioloop.IOLoop.instance().start()
