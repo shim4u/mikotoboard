@@ -149,10 +149,9 @@ class Database(object):
 		elif x%5:
 			return pages + 1
 
-	def get_threads(self, board, user, page, callback):
+	def get_threads(self, board, page, callback):
 		page_id = page
 		page = (page + 1) * 5
-		auth = self.check_auth(user)
 		if self.boards.find_one({'id': board}):
 			threads=[]
 			for thread in self.threads.find({'board': board}).sort('last_post'):
@@ -182,31 +181,20 @@ class Database(object):
 			threads = threads[page-5:page]
 			boards = self.boards.find()
 			board = self.boards.find_one({'id': board})
-			callback(threads, board, boards, auth, pages, page_id)
+			callback(threads, board, boards, pages, page_id)
 		else:
 			boards = None
 			pages = None
 			page = None
 			board = None
 			threads = None
-			callback(threads, board, boards, auth, pages, page)
+			callback(threads, board, boards, pages, page)
 			threads.reverse()
 
-	def get_post(self, post_id, board, user, callback):
-		auth = self.check_auth(user)
-		boards = self.boards.find().sort('id')
-		post = self.posts.find_one({'id': post_id})
-		if post:
-			board = self.threads.find_one({'id': post['thread']})['board']
-			callback(post, boards, board, auth)
-		else:
-			callback(post=False, boards=boards, auth=auth, board=None)
-
-	def get_posts(self, thread_id, board, user, callback):
-		auth = self.check_auth(user)
+	def get_posts(self, thread_id, board, callback):
 		thread = self.threads.find_one({'id': int(thread_id)})
 		boards = self.boards.find()
-		callback(self.posts.find({'thread': int(thread_id)}).sort('id'), thread, boards, auth)
+		callback(self.posts.find({'thread': int(thread_id)}).sort('id'), thread, boards)
 	def get_all_news(self, callback):
 		news = self.news.find().sort('pub_date')
 		callback(news)
@@ -333,22 +321,17 @@ class Database(object):
 		self.news.update({'id': int(_id)}, {"$set": {'body': body, 'head': head}})
 		callback('news')
 	
-	def check_auth(self, user, callback = None):
-		if user == None: return False
+	def check_auth(self, user, callback = False):
+		if not user: 
+			return False
 		record = self.users.find_one({'username': user['user']})
 		if record:
 			if record['password'] == user['pass']:
 				if callback:
-					callback(True, user)
+					callback(user)
 				else:
-					return True
-			else:
-				if callback:
-					callback(False)
-				else:
-					return False
-		else:
-			if callback:
-				callback(False)
+					return user
 			else:
 				return False
+		else:
+			return False

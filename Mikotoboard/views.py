@@ -35,21 +35,12 @@ class BaseHandler(tornado.web.RequestHandler):
 		user['pass'] = password
 		return user
 
-class PostHandler(BaseHandler):
-	def get(self, post_id):
-		user = self.get_user()
-		self.db.get_post(int(post_id), user=user, callback = self.on_response, board=None)
-	
-	def on_response(self, post, boards, board, auth):
-		self.render('templates/board/post.html',post=post, boards=boards, board=board, auth=auth, title=self.title)
-	
 class BoardHandler(BaseHandler):
 	@tornado.web.asynchronous
 	def get(self, board, page=0):
 		if page == '':
 			page = 0
-		user = self.get_user()
-		self.db.get_threads(board, user, int(page), self.on_response)
+		self.db.get_threads(board, int(page), self.on_response)
 	
 	@tornado.web.asynchronous
 	def post(self, _board, page):
@@ -72,9 +63,9 @@ class BoardHandler(BaseHandler):
 			self.write('<center><font color=RED><b>Что-то не так. Скорее всего ошибка, или в качестве изображения указан неподходящий файл. Поробуйте ещё раз.</b></font></center>')
 			self.finish()
 		
-	def on_response(self, response, board, boards, auth, pages, page):
+	def on_response(self, response, board, boards, pages, page):
 		if board:
-			self.render('templates/board/board.html', threads = response, board = board, boards = boards, auth = auth, pages = pages, page = page, help = self.help, title = self.title)
+			self.render('templates/board/board.html', threads = response, board = board, boards = boards, auth = self.get_current_user(), pages = pages, page = page, help = self.help, title = self.title)
 		else:
 			self.write('<center><font color=RED>Запрошеной доски не существует</font></center>')
 			self.finish()
@@ -96,7 +87,7 @@ class ThreadHandler(BaseHandler):
 	@tornado.web.asynchronous
 	def get(self, thread_id):
 		user = self.get_user()
-		self.db.get_posts(int(thread_id), user=user,  board = None, callback=self._on_response)
+		self.db.get_posts(int(thread_id), board = None, callback=self._on_response)
 	
 	@tornado.web.asynchronous
 	def post(self, thread_id):
@@ -121,9 +112,9 @@ class ThreadHandler(BaseHandler):
 		#self.write(response['filename'])
 		#self.finish()
 	
-	def _on_response(self, response, thread, boards, auth):
+	def _on_response(self, response, thread, boards):
 		if thread:
-			self.render('templates/board/thread.html', posts = response, thread = thread, boards = boards, auth=auth, help=self.help, title=self.title)
+			self.render('templates/board/thread.html', posts = response, thread = thread, boards = boards, auth=self.get_current_user(), help=self.help, title=self.title)
 		else:
 			self.write('<center><span style="color: red;">Запрошеного вами треда не существует</span>')
 			self.finish()
@@ -137,10 +128,10 @@ class LoginHandler(BaseHandler):
 		pwd = hashlib.sha256(self.get_argument('password')).hexdigest()
 		user = {'user': login, 'pass': pwd}
 		self.db.check_auth(user, callback=self.on_auth)
-	def on_auth(self, auth, user=None):
+	def on_auth(self, auth):
 		if auth:
-			self.set_secure_cookie('user', user['user'])
-			self.set_secure_cookie('pass', user['pass'])
+			self.set_secure_cookie('user', auth['user'])
+			self.set_secure_cookie('pass', auth['pass'])
 			self.redirect('/admin/users')
 		else:
 			self.redirect('/admin/login')
@@ -286,10 +277,9 @@ application = tornado.web.Application([
 									(r'/admin/logout', LogoutHandler),
 									(r'/admin/rp', RemovePost),
 									(r'/admin/(.*)', AdminHandler),
-									(r'/post/(.*)', PostHandler),
 									(r'/(.*)/(.*)', BoardHandler),
 									(r'/(.*)', BoardHandler)], debug=True, cookie_secret=config.get('security', 'cookie_secret'), login_url="/admin/login")
 
 if __name__ == '__main__':
-	application.listen(80)
+	application.listen(8080)
 	tornado.ioloop.IOLoop.instance().start()
