@@ -12,7 +12,7 @@
 			<div class="container">
 	<div class="navbar navbar-static-top">
 		<div class="navbar-inner">
-				{% for _board in boards %}<a rel="tooltip" class="brand" title="{{_board['desc']}}" href="/{{_board['id']}}/">/{{_board['id']}}/</a> {% end %}
+				{% for _board in boards %}{% if not _board['hidden'] %}<a rel="tooltip" class="brand" title="{{_board['desc']}}" href="/{{_board['id']}}/">/{{_board['id']}}/</a> {% end %}{% end %}
 			</div>
 		</div>
 	</div>

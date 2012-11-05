@@ -8,47 +8,47 @@
 	<link rel="stylesheet" href="/styles/bootstrap-responsive.css">
 <body>
 	<div style="text-align: center;"><h2>/{{thread['board']}}/ - Тред №{{thread['id']}}</h2></div>
-	<div class="clear"></div>
-	<div class="container">
-		<div class="row">
-			<div class="span6 offset3">
-				<table style="text-align: right">
-				<form id="newPost" enctype="multipart/form-data" method="post" action="/thread/{{thread['id']}}">
-					<tr>	
-						<td><b>Имя</b></td><td width=100%><input type="text" name="name" style="width: 100%"></td>
-					</tr>
-					<tr>
-						<td><b>Изображение</b></td><td style="text-align: left"><input type="file" id="file" name="picture"  style="width: 100%"></td>
-					</td>
-					<tr>
-						<td><b>Сообщение</b></td><td><textarea id="message" name="message" style="width: 100%" rows="6">lol</textarea></td>
-					</tr>
-				</form>
-				</table>
-				<div style="float: left"><a href="/{{thread['board']}}/" class="submitButton">Назад</a></div><div style="float: right"><a href="#" class="submitButton" onClick="submitPost()">Отправить</a></div>
-			</div>
-		</div>
 		<div class="clear"></div>
-		{% for post in posts %}
+		<div class="container">
 			<div class="row">
-			<div class="post span12">
-				<div style="margin-left: 5px"><b><a onClick="appendId({{post['id']}})">№{{post['id']}}</a></b> | {{post['name']}} | {{post['pub_date']}}<div style="float: right; margin-right: 5px"><input type="checkbox" value="{{post['id']}}" form="delete_post" name="post"></div><div class="hr"></div></div>
-				{% if post['picture'] %}<a href="{{post['picture']}}"><img src="{{post['thumb']}}" style="float: left; padding: 5px; padding-bottom: 4px; border-radius: 7px"></a>{% end %}
-				<p style="padding-left: 2px; padding-right: 2px">{{post['message']}}</p>
-			</div>
+				<div class="span6 offset3">
+					<table style="text-align: right">
+						<form id="newPost" enctype="multipart/form-data" method="post" action="/thread/{{thread['id']}}">
+							<tr>	
+								<td><b>Имя</b></td><td width=100%><input type="text" name="name" style="width: 100%"></td>
+							</tr>
+							<tr>
+									<td><b>Изображение</b></td><td style="text-align: left"><input type="file" id="file" name="picture" style="width: 100%"></td>
+							</tr>
+							<tr>
+								<td><b>Сообщение</b></td><td><textarea id="message" name="message" style="width: 100%" rows="6">lol</textarea></td>
+							</tr>
+						</form>
+					</table>
+					<div style="float: left"><a href="/{{thread['board']}}/" class="submitButton">Назад</a></div><div style="float: right"><a href="#" class="submitButton" onClick="submitPost()">Отправить</a></div>
+				</div>
 			</div>
 			<div class="clear"></div>
-		{% end %}
-	</div>
-	{% if auth %}<form action="/admin/rp" method="post" id="delete_post"><button class="btn" type="submit">Удалить Посты</button></form>{% end %}
+			{% for post in posts %}
+				<div class="row">
+					<div class="post span12">
+						<div style="margin-left: 5px"><b><a onClick="appendId({{post['id']}})">№{{post['id']}}</a></b> | {{post['name']}} | {{post['pub_date']}}<div style="float: right; margin-right: 5px"><input type="checkbox" value="{{post['id']}}" form="delete_post" name="post"></div><div class="hr"></div></div>
+						{% if post['picture'] %}<a href="{{post['picture']}}"><img src="{{post['thumb']}}" style="float: left; padding: 5px; padding-bottom: 4px; border-radius: 7px"></a>{% end %}
+						<p style="padding-left: 2px; padding-right: 2px">{{post['message']}}</p>
+					</div>
+				</div>
+				<div class="clear"></div>
+			{% end %}
+		</div>
+{% if auth %}<form action="/admin/rp" method="post" id="delete_post"><button class="btn" type="submit">Удалить Посты</button></form>{% end %}
 <center> Микотодоска v1.6 </center>
 </body>
 <script>
 function appendId(postid) {
-	document.getElementById('message').value += ("\n>>" + postid)
+document.getElementById('message').value += ("\n>>" + postid)
 }
 function submitPost(){
-	document.forms.newPost.submit();
+document.forms.newPost.submit();
 }
 </script>
 </html>

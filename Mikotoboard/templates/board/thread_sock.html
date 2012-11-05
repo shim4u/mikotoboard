@@ -1,0 +1,82 @@
+{% autoescape None %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WebSocket</title>
+	<link rel="stylesheet" href="/styles/style.css">
+	<link rel="stylesheet" href="/styles/bootstrap.css">
+	<link rel="stylesheet" href="/styles/bootstrap-responsive.css">
+<body>
+	<div style="text-align: center;"><h2>Mikotoboard - WebSocket Test</h2></div>
+	<div class="clear"></div>
+	<div class="container" id="container">
+		<div class="row">
+			<div class="span6 offset3">
+				<table style="text-align: right">
+				<form id="newPost" enctype="multipart/form-data" method="post" action="/thread/{{thread['id']}}">
+					<tr>	
+						<td><b>Name</b></td><td width=100%><input id="name" type="text" name="name" style="width: 100%"></td>
+					</tr>
+					<tr>
+						<td><b>Picture</b></td><td style="text-align: left"><input id="picture" type="file" id="file" name="picture"  style="width: 100%"></td>
+					</td>
+					<tr>
+						<td><b>Message</b></td><td><textarea id="message" name="message" style="width: 100%" rows="6"></textarea></td>
+					</tr>
+				</form>
+				</table>
+				<div style="float: right"><a href="#" class="submitButton" onClick="submitPost()" id="send">Send</a></div>
+			</div>
+		</div>
+		<div class="clear"></div>
+		{% for post in posts %}
+			<div class="row">
+			<div class="post span12">
+				<div style="margin-left: 5px"><b><a id="{{post['id']}}" onClick="appendId({{post['id']}})">№{{post['id']}}</a></b> | {{post['name']}} | {{post['pub_date']}}<div style="float: right; margin-right: 5px"><input type="checkbox" value="{{post['id']}}" form="delete_post" name="post"></div><div class="hr"></div></div>
+				{% if post['picture'] %}<a href="{{post['picture']}}"><img src="{{post['thumb']}}" style="float: left; padding: 5px; padding-bottom: 4px; border-radius: 7px"></a>{% end %}
+				<p style="padding-left: 2px; padding-right: 2px">{{post['message']}}</p>
+			</div>
+			</div>
+			<div class="clear"></div>
+		{% end %}
+	<div class="clear" id="bottom"></div>
+	</div>
+	{% if auth %}<form action="/admin/rp" method="post" id="delete_post"><button class="btn" type="submit">Удалить Посты</button></form>{% end %}
+<center> Микотодоска v1.6 </center>
+</body>
+<script src="styles/js/jquery.js"></script>
+<script>
+var height
+ws = new WebSocket("ws://178.217.31.16:8080/socket");
+ws.onopen = function() {};
+function submitPost() {
+	var image = document.getElementById('picture').files[0];
+	if(image != ""){
+		reader = new FileReader();
+		reader.readAsDataURL(image);
+		reader.onload = function (e){
+			var name = $("#name").val();
+			var picture = {'body': e.target.result, 'content_type': image['type']};
+			var	message = $("#message").val();
+			var	new_post = {'name': name, 'picture': picture, 'message': message};
+			var new_post_json = JSON.stringify(new_post);
+			ws.send(new_post_json);
+		};
+	}else{
+		var name = $("#name").val();
+		var message = $("#message").val();
+		var new_post = {'name': name, 'picture': False, 'message': message};
+		var new_post_json = JSON.stringify(new_post);
+		ws.send(new_post_json);
+	};
+};
+ws.onmessage = function(e){
+	document.getElementById('container').innerHTML+=e.data;
+
+};
+ws.onclose = function() {};
+function appendId(postid) {
+	document.getElementById('message').value += ("\n>>" + postid)
+}
+</script>
+</html>
