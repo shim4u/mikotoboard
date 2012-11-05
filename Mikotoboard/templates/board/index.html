@@ -10,9 +10,11 @@
 <title>Микотодоска</title>
 </head>
 <body>
-<div class="navbar-fixed-top">
-	<div class="container">
-		{% for _board in boards %}<a rel="tooltip" title="{{_board['desc']}}" href="/{{_board['id']}}/">/{{_board['id']}}/</a> {% end %}
+		<div class="container">
+<div class="navbar navbar-static-top">
+	<div class="navbar-inner">
+			{% for _board in boards %}<a class="brand" rel="tooltip" title="{{_board['desc']}}" href="/{{_board['id']}}/">/{{_board['id']}}/</a> {% end %}
+		</div>
 	</div>
 </div>
 <div class="container">
