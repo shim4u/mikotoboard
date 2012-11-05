@@ -227,7 +227,11 @@ class AdminHandler(BaseHandler):
 		elif t == "new_board":
 			board_id = self.get_argument('id')
 			desc = self.get_argument('desc')
-			self.db.new_board(board_id, desc, self.on_response)
+			try:
+				hidden = self.get_argument('hidden')
+			except:
+				hidden = False
+			self.db.new_board(board_id, desc, hidden, self.on_response)
 		elif t == 'lift_bans':
 			bans = self.get_arguments('ip')
 			print bans

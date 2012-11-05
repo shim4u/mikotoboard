@@ -271,8 +271,8 @@ class Database(object):
 	def get_bans(self, callback):
 		callback(self.bans.find())
 	
-	def new_board(self, board_id, desc, callback):
-		board = {'id': board_id, 'desc': desc}
+	def new_board(self, board_id, desc, hidden, callback):
+		board = {'id': board_id, 'desc': desc, 'hidden': hidden}
 		self.boards.insert(board)
 		callback('boards')
 
