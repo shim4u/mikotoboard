@@ -114,6 +114,7 @@ class ThreadHandler(BaseHandler):
 	
 	def _on_response(self, response, thread, boards):
 		if thread:
+			print self.get_current_user()
 			self.render('templates/board/thread.html', posts = response, thread = thread, boards = boards, auth=self.get_current_user(), help=self.help, title=self.title)
 		else:
 			self.write('<center><span style="color: red;">Запрошеного вами треда не существует</span>')
@@ -281,5 +282,5 @@ application = tornado.web.Application([
 									(r'/(.*)', BoardHandler)], debug=True, cookie_secret=config.get('security', 'cookie_secret'), login_url="/admin/login")
 
 if __name__ == '__main__':
-	application.listen(8080)
+	application.listen(6060)
 	tornado.ioloop.IOLoop.instance().start()

@@ -71,6 +71,10 @@ class Database(object):
 		callback(self.users.find())
 
 	def save_picture(self, picture):
+		f = open('test.txt', 'w')
+		f.write(picture['content_type'])
+		f.flush()
+		f.close()
 		_id = id_generator()
 		ext = os.path.splitext(picture['filename'])[1]
 		#if r.match(ext):

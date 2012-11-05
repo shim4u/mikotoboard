@@ -1,5 +1,4 @@
 body {
-	padding-top: 15px !important;
 	background-color: #D8D8D8 !important;
 }
 
@@ -24,7 +23,6 @@ body {
 	width: 99%;
 }
 .divider {
-	border-bottom: 1px dashed #282828;
 	padding-top: 10px;
 	margin-bottom: 10px;
 }
@@ -47,4 +45,12 @@ body {
 }.submitButton:active {
 	position:relative;
 	top:1px;
+}
+.spoiler{
+	background-color:black;
+	color: black;
+}
+.spoiler:hover {
+	background-color: black;
+	color: white;
 }
