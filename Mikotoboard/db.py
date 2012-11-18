@@ -198,7 +198,8 @@ class Database(object):
 	def get_posts(self, thread_id, board, callback):
 		thread = self.threads.find_one({'id': int(thread_id)})
 		boards = self.boards.find()
-		callback(self.posts.find({'thread': int(thread_id)}).sort('id'), thread, boards)
+		posts = self.posts.find({'thread': int(thread_id)}).sort('pub_date')
+		callback(posts, thread, boards)
 	def get_all_news(self, callback):
 		news = self.news.find().sort('pub_date')
 		callback(news)
