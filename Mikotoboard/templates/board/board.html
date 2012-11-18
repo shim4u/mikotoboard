@@ -1,6 +1,4 @@
-﻿{% autoescape None %}
-<!DOCTYPE html>
-<html>
+﻿<html>
 <head>
 <meta charset="utf-8">
 <title>Mikotoboard</title>
@@ -40,7 +38,7 @@
 	{%for thread in threads%}
 		<div class="row">
 			<div class="thread span12">
-				<div style="margin-left: 5px"><b>№{{thread['op']['id']}}</b> | {{thread['op']['name']}} | {{thread['op']['pub_date']}} <a style="margin-left: 5px" href="/thread/{{thread['op']['thread']}}">Открыть Тред</a>{%if auth%}<div style="float:right; margin-right: 5px"><input type="checkbox" name="post" form="delete_post" value="{{thread['op']['id']}}"></div>{%end%}<div class="hrthread"></div></div>
+				<div style="margin-left: 5px"><b>№{{thread['op']['id']}}</b> | {{thread['op']['name']}} | {{thread['op']['pub_date']}}  <a style="margin-left: 5px" href="/thread/{{thread['op']['thread']}}">Открыть Тред</a><div style="float:right; margin-right: 5px">{% if len(thread['posts']) > 2 %} <b>Всего постов:</b> {{ len(thread['posts']) + 1}} {% end %}{% if auth %}<input type="checkbox" name="post" form="delete_post" value="{{thread['op']['id']}}">{% end %}</div><div class="hrthread"></div></div>
 				<a href="{{thread['op']['picture']}}"><img src="{{thread['op']['thumb']}}" style="float: left; padding: 5px; padding-bottom: 4px; border-radius: 7px"></a>
 				<p style="padding-left: 2px, padding-right: 2px">{{thread['op']['message']}}</p>
 				<div class="clear"></div>
