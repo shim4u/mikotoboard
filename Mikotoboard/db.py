@@ -23,6 +23,14 @@ config = SafeConfigParser()
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
 	return ''.join(random.choice(chars) for x in range(size))
 
+re_1 = re.compile(r'&gt;(.*)')
+re_2 = re.compile(r'\n')
+re_3 = re.compile(r'\&gt;&gt;([0-9]+)')
+re_4 = re.compile(r'(\*\*)(.+?)\1')
+re_5 = re.compile(r'(\*)(.+?)\1')
+re_6 = re.compile(r'(\%\%)(.+?)\1')
+re_7 = re.compile(r'(\-\-)(.+?)\1')
+
 class Database(object):
 	def __init__(self):
 		config.read('config.ini')
@@ -38,20 +46,13 @@ class Database(object):
 	
 	def message_handler(self, message, thread_id):
 		message = tornado.escape.xhtml_escape(message)
-		r = re.compile(r'&gt;(.*)')
-		message = r.sub(r'<span style="color:green">&gt;\1</span>', message)
-		r = re.compile(r'\n')
-		message = r.sub('<br>', message)
-		r = re.compile(r'\&gt;&gt;([0-9]+)')
-		message = r.sub(r'<a href="/thread/%s#\1" id="msg\1">&gt;&gt;\1</a>' % thread_id, message)
-		r = re.compile(r'(\*\*)(.+?)\1')
-		message = r.sub(r'<b>\2</b>', message)
-		r = re.compile(r'(\*)(.+?)\1')
-		message = r.sub(r'<i>\2</i>', message)
-		r = re.compile(r'(\%\%)(.+?)\1')
-		message = r.sub(r'<span class="spoiler">\2</span>', message)
-		r = re.compile(r'(\-\-)(.+?)\1')
-		message = r.sub(r'<s>\2</s>', message)
+		message = re_1.sub(r'<span style="color:green">&gt;\1</span>', message)
+		message = re_2.sub('<br>', message)
+		message = re_3.sub(r'<a href="/thread/%s#\1" id="msg\1">&gt;&gt;\1</a>' % thread_id, message)
+		message = re_4.sub(r'<b>\2</b>', message)
+		message = re_5.sub(r'<i>\2</i>', message)
+		message = re_6.sub(r'<span class="spoiler">\2</span>', message)
+		message = re_7.sub(r'<s>\2</s>', message)
 		
 		#r = re.compile('&gt;&gt;([0-9]+)')
 		#message = r.sub(r'<a href="/thread/%s#\1">&#62;\1</a>' % thread_id, message)
