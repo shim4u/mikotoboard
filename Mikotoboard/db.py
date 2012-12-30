@@ -21,7 +21,7 @@ import tornado.escape
 config = SafeConfigParser()
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
-	return ''.join(random.choice(chars) for x in range(size))
+	return ''.join(random.choice(chars) for x in xrange(size))
 
 re_1 = re.compile(r'&gt;(.*)')
 re_2 = re.compile(r'\n')
@@ -72,28 +72,23 @@ class Database(object):
 		callback(self.users.find())
 
 	def save_picture(self, picture):
-		f = open('test.txt', 'w')
-		f.write(picture['content_type'])
-		f.flush()
-		f.close()
+		with open('test.txt', 'w') as f:
+			f.write(picture['content_type'])
 		_id = id_generator()
 		ext = os.path.splitext(picture['filename'])[1]
 		#if r.match(ext):
 		for post in self.posts.find():
 			if post['picture']:
-				f = open('.' + post['picture'], 'rb')
-				sum1 = hashlib.md5(f.read()).hexdigest()
-				sum2 = hashlib.md5(picture['body']).hexdigest()
-				f.close()
+				with open('.' + post['picture'], 'rb') as f:
+					sum1 = hashlib.md5(f.read()).hexdigest()
+					sum2 = hashlib.md5(picture['body']).hexdigest()
 				if sum1 == sum2:
 					return post['picture'], post['thumb']
 					break
-		picture_name = "/img/" + _id + ext
-		thumb_name = "/img/thumb/" + _id + ext
-		f = open('.' + picture_name, 'wb')
-		f.write(picture['body'])
-		f.flush()
-		f.close()
+		picture_name = "/img/%s%s" % (_id, ext)
+		thumb_name = "/img/thumb/%s%s" % (_id, ext)
+		with open('.' + picture_name, 'wb') as f:
+			f.write(picture['body'])
 		thumb = Image.open('.' + picture_name)
 		thumb.thumbnail((200, 400), Image.ANTIALIAS)
 		thumb.save('.' + thumb_name, quality=100)
@@ -148,11 +143,7 @@ class Database(object):
 		callback(thread_id, board)
 	
 	def get_pages(self,x):
-		pages = x/5
-		if not x%5:
-			return pages
-		elif x%5:
-			return pages + 1
+		return x/5 + 1 if x%5 else 0
 
 	def get_threads(self, board, page, callback):
 		page_id = page
@@ -260,7 +251,7 @@ class Database(object):
 	def new_user(self, username, role, password, callback):
 		for user in self.users.find():
 			if user['username'] == username:
-				callback("User allready exists")
+				callback("User already exists")
 				return False
 		password = hashlib.sha256(password).hexdigest()
 		user = {'username': username, 'password': password, 'role': role}
