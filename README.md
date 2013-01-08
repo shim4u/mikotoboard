@@ -3,4 +3,4 @@ To Use: Run views.py. Uses port 6060. Then set up some proxy, i.e. like here htt
 Or, you can just change application port to 80 and start script as root, your choice, really.
 Requirements: TornadoWeb, Python Imaging Library, Mongodb, pymogno, python2.<br>
 <font color="red">WARNING!</font> this script makes use of asynchronous featuers of tornado web.<br>
-Oh, and by the way, there's alot of russian language used. You'll have to translate it yourself, by now. I'll add internationalization later, someday.
+Oh, and by the way, there's a lot of russian language used. You'll have to translate it yourself, by now. I'll add internationalization later, someday.
