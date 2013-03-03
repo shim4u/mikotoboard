@@ -77,14 +77,16 @@ class Database(object):
 		_id = id_generator()
 		ext = os.path.splitext(picture['filename'])[1]
 		#if r.match(ext):
-		for post in self.posts.find():
-			if post['picture']:
-				with open('.' + post['picture'], 'rb') as f:
-					sum1 = hashlib.md5(f.read()).hexdigest()
-					sum2 = hashlib.md5(picture['body']).hexdigest()
-				if sum1 == sum2:
-					return post['picture'], post['thumb']
-					break
+		posts = self.posts.find()
+		if posts:
+			for post in posts:
+				if post['picture']:
+					with open('.' + post['picture'], 'rb') as f:
+						sum1 = hashlib.md5(f.read()).hexdigest()
+						sum2 = hashlib.md5(picture['body']).hexdigest()
+					if sum1 == sum2:
+						return post['picture'], post['thumb']
+						break
 		picture_name = "/img/%s%s" % (_id, ext)
 		thumb_name = "/img/thumb/%s%s" % (_id, ext)
 		with open('.' + picture_name, 'wb') as f:
