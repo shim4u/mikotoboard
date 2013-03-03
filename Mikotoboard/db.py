@@ -331,6 +331,7 @@ class Database(object):
 				else:
 					return user
 			else:
+				print 'password does not match'
 				return False
 		else:
 			return False
